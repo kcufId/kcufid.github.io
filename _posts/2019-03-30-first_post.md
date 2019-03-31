@@ -7,6 +7,4 @@ title:  开始的地方
 
 
 
-<span style="color:red;">这是比font标签更好的方式。可以试试。</span>
-
 开始于：2019年3月30日。
