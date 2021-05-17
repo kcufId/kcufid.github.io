@@ -75,4 +75,5 @@ exclude:
   - README.md
   - CNAME
 
+owner : "坦克小王子"
 theme: jekyll-theme-hacker
