@@ -271,3 +271,22 @@ a:active, a:focus {
 #wrapper {
   min-height: calc(100vh - 100px);
 }
+
+// me add 
+// Mobile breakpoints
+@mixin mobile {
+  @media screen and (max-width: 640px) {
+    @content;
+  }
+}
+
+.site-description {
+  text-align: right;
+  margin: -10px 0 0 0;
+  color: #cf9c36;
+  font-size: 16px;
+
+  @include mobile {
+    margin: 3px 0;
+  }
+}
