@@ -27,6 +27,9 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
 
+# excerpt
+excerpt_separator: "####"
+
 # Custom variables
 owner : "坦克小王子"
 year : "2021"
