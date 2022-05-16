@@ -28,7 +28,7 @@ plugins:
   - jekyll-sitemap
 
 # excerpt
-excerpt_separator: "###"
+excerpt_separator: "##"
 
 # Custom variables
 owner : "坦克小王子"
