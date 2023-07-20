@@ -21,7 +21,7 @@
 
 `dd CI!g_ciOptions L1`
 
-![image1_ab6wcz](F:\pages\翻译\pic\image1_ab6wcz.png)
+![image1_ab6wcz](https://kcufid.github.io/images/pic/2023-07-19\image1_ab6wcz.png)
 
 ​    这个配置变量有许多可以设置的标志，但通常用于绕过驱动程序签名强制执行（DSE）时，该值被设置为0，完全禁用了DSE，并允许攻击者轻易地加载未签名的驱动程序。
 
@@ -37,13 +37,13 @@
 
 那么VBS如何防止使用泄漏的证书或易受攻击的驱动程序来禁用驱动程序签名强制执行呢？让我们来看一下CI.dll中如何解析g_CiOptions变量：
 
-![image2_ykmuh3](F:\pages\翻译\pic\image2_ykmuh3.png)
+![image2_ykmuh3](https://kcufid.github.io/images/pic/2023-07-19\image2_ykmuh3.png)
 
 在这里，我们可以看到对MmProtectDriverSection的使用，这是一个作为Kernel Data Protection（KDP）技术的一部分而提供的API（另一个在VBS框架下的缩写）。该API确保在传递了一个内存地址后，运行在Ring-0中的代码无法修改其内容。
 
 即使我们尝试使用附加到内核的WinDBG（通过将DebugFlags设置为0x10启用了DSE），我们仍然无法更新存储的值：
 
-![image3_ye4a8a](F:\pages\翻译\pic\image3_ye4a8a.png)
+![image3_ye4a8a](https://kcufid.github.io/images/pic/2023-07-19\image3_ye4a8a.png)
 
 这意味着当启用了VBS后，我们将不得不寻找其他方法来禁用DSE。
 
@@ -51,11 +51,11 @@
 
 ​      如果您之前跟踪过许多 AMSI（Antimalware Scan Interface）绕过技术，您可能对我们在这里绕过此保护所能做的事情感到熟悉...我们进行代码补丁。首先，我们需要了解需要进行代码补丁的位置，因此让我们进入内核调试器会话，并在一个我们知道可能会检查策略的位置添加一个断点。根据对CI.dll的审查，CiCheckPolicyBits看起来是一个适合设置断点的函数。从这里开始，尝试加载未签名的驱动程序会产生一个如下的调用堆栈：
 
-![image4_mmaemq](F:\pages\翻译\pic\image4_mmaemq.png)
+![image4_mmaemq](https://kcufid.github.io/images/pic/2023-07-19\image4_mmaemq.png)
 
 ​    在这里，我们看到从内核转入CI（Code Integrity）通过SeValidateImageHeader，并调用了CiValidateImageHeader函数。这个函数负责验证我们的驱动程序是否符合签名要求。让我们在SeValidateImageHeader中添加一个断点，以查看在加载未签名驱动程序失败时CiValidateImageHeader的返回值：
 
-![image5_aivejm](F:\pages\翻译\pic\image5_aivejm.png)
+![image5_aivejm](https://kcufid.github.io/images/pic/2023-07-19\image5_aivejm.png)
 
 ​    这的确看起来像是一个NTSTATUS代码。在魔法数字数据库中搜索显示c0000428对应于STATUS_INVALID_IMAGE_HASH，这意味着驱动程序的映像哈希无效，因此未通过签名验证。
 
@@ -71,7 +71,7 @@
 
 对于经常涉足游戏作弊的人，您可能知道在这种情况下我们使用的函数是MiGetPteAddress。关于如何找到这个方法的精彩解释，请查看@33y0re的关于PTE覆写的博客文章。这个函数实际上会揭示我们后续需要的PTE基址，在下面可以看到它是0FFFFCE8000000000，但在每次重新启动后都会更新：
 
-![image6_cjcasa](L:\pages\翻译\pic\image6_cjcasa.png)
+![image6_cjcasa](https://kcufid.github.io/images/pic/2023-07-19\image6_cjcasa.png)
 
 ​     为了找到这个函数，我们需要在内存中搜索字节特征( byte signature)。我们可以使用类似以下的方法来实现：
 
@@ -348,11 +348,11 @@ HVCI使用第二级地址表（SLAT）来确保被映射为读-执行的页面�
 
 例如，让我们尝试在启用HVCI的情况下重新运行上面的场景：
 
-![image7_mfl3qx](L:\pages\翻译\pic\image7_mfl3qx.png)
+![image7_mfl3qx](https://kcufid.github.io/images/pic/2023-07-19\image7_mfl3qx.png)
 
 ​    如果我们获取内存转储并将其加载到WinDBG中，我们可以看到，尽管我们试图更新内存页面的保护，但我们的memcpy仍然导致了SYSTEM SERVICE EXCEPTION：
 
-![image8_zvjdmb](L:\pages\翻译\pic\image8_zvjdmb.png)
+![image8_zvjdmb](https://kcufid.github.io/images/pic/2023-07-19\image8_zvjdmb.png)
 
 ​    如果无法启用HVCI，接下来可以考虑使用微软的"攻击面减小"（Attack Surface Reduction）。这个功能会阻止一系列常被利用的易受攻击的驱动程序和泄露的代码签名证书。再次阻止了攻击者进入内核所需的立足点，但由于存在大量驱动程序漏洞，它的效果较差。
 
