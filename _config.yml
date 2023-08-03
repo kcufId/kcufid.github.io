@@ -29,6 +29,7 @@ plugins:
 
 # excerpt 用于分割md文档中的字段，
 # 没找到那种在md不显示，也能起到分割的办法，用这个二级标题更合适。
+# 以后就写个“正文”吧，用文章内的从有点别扭。其他用二级标题感觉字体很大。
 excerpt_separator: "##"
 
 # Custom variables
