@@ -27,7 +27,8 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
 
-# excerpt
+# excerpt 用于分割md文档中的字段，
+# 没找到那种在md不显示，也能起到分割的办法，用这个二级标题更合适。
 excerpt_separator: "##"
 
 # Custom variables
