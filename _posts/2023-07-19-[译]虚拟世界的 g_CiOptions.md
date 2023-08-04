@@ -9,7 +9,7 @@
 
 
 
-#### 驱动签名强制
+### 驱动签名强制
 
 ​      驱动程序签名强制执行（Driver Signature Enforcement，DSE）是Windows长期以来采用的一种方法，用于防止攻击者加载未签名的驱动程序到内核中。这在很大程度上是确保攻击者不能轻易绕过内核中实施的许多安全功能，例如通过修改EPROCESS字段来干扰进程保护灯（Process Protection Light，PPL）。(来自微软自己的翻译，chat翻译的是：进程保护轻量级)。
 
