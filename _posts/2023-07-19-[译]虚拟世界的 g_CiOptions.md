@@ -1,7 +1,7 @@
 > (翻译源： https://blog.xpnsec.com/gcioptions-in-a-virtualized-world/)
 >
 
-> 全文ChatGPT3.5 翻译，中间小小的修改。禁当入门记录，免得下次看的时候陌生。
+> 全文ChatGPT3.5 翻译，中间小小的修改。仅当入门记录，免得下次看的时候陌生。
 
    随着代码签名证书的泄露和针对易受攻击的驱动程序的利用成为常见现象，攻击者正在将内核作为他们的新游乐场。而且，随着微软推出了诸如虚拟化基础安全（Virtualization Based Security，VBS）和Hypervisor Code Integrity（HVCI）等技术，我希望花些时间了解在面对试图逃脱到Ring-0（内核模式）的攻击者时，终端节点的脆弱性。
 
